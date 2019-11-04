@@ -1,0 +1,14 @@
+publish:
+  name: 'Build and publish Windows 7za Stevedore artifacts, including source (GPL)'
+  agent:
+    type: Unity::VM
+    image: cds-ops/win10-katana-agent
+    flavor: b1.small
+  commands:
+    # The VS install is buggy on 'cds-ops/win10-katana-agent'; need to manually add the 'rc.exe' path.
+    - 'set PATH=%ProgramFiles(x86)%\Windows Kits\10\bin\10.0.16299.0\x64;%PATH% && "%ProgramFiles(x86)%\Microsoft Visual Studio 14.0\VC\vcvarsall.bat" x86 && cd CPP\7zip\Bundles\Alone && nmake clean && nmake CPU=IA32 MY_STATIC_LINK=1'
+    - 'set PATH=%ProgramFiles(x86)%\Windows Kits\10\bin\10.0.16299.0\x64;%PATH% && "%ProgramFiles(x86)%\Microsoft Visual Studio 14.0\VC\vcvarsall.bat" x64 && cd CPP\7zip\Bundles\Alone && nmake clean && nmake CPU=AMD64 MY_STATIC_LINK=1'
+    - python unity-build-artifacts.py "%GIT_REVISION%"
+    - curl -sSo StevedoreUpload.exe "%STEVEDORE_UPLOAD_TOOL_URL%"
+    # Upload source first, then binaries, just in case the upload fails halfway through.
+    - StevedoreUpload.exe --repo=public --version-len=12 --version="%GIT_REVISION%" stevedore-source/* stevedore-binary/*

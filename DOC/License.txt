@@ -13,6 +13,14 @@
   The GNU LGPL + unRAR restriction means that you must follow both 
   GNU LGPL rules and unRAR restriction rules.
 
+  The files in C/zstd are from commit 7e35b352 of
+  https://github.com/facebook/zstd
+  Their (LGPL-compatible) license can be found in LICENSE-zstd.txt.
+
+  The files in C/zstdmt can be found in commit f9bd841 of
+  https://github.com/mcmilk/zstdmt
+  Their (LGPL-compatible) license can be found in LICENSE-zstdmt.txt.
+
 
   GNU LGPL information
   --------------------
